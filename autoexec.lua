@@ -1,6 +1,24 @@
 
 local function start()
-local scriptthread = {}
+local scriptthread = {}local function LoadAllLua()
+    local rootPath = utils.get_appdata_path("PopstarDevs\\2Take1Menu\\scripts", "")
+    local scriptName = debug.getinfo(1, "S").source:sub(autoloadDir:len() + 2)
+    local excludedFiles = {["autoexec.lua"] = true, ["DoNotLoadMe.lua"] = true}
+    local luaFiles = utils.get_all_files_in_directory(rootPath, "lua")
+    for i=1,#luaFiles do
+        if not excludedFiles[luaFiles[i]] then
+            local path = rootPath .. "\\" .. luaFiles[i]
+            local chunk, err = loadfile(path)
+            if err then
+                ui.notify_above_map("Error loading " .. loadFiles[i] .. "\nError in console", "Autoexec", 140)  
+                print(err)
+            else
+                chunk()
+            end
+        end
+    end
+end
+LoadAllLua()
 local threadID = 0
 
 --autoecxec_thread = function(feat)
